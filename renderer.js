@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const formattedTagName = `<${tagName}>`;
         tagTitleHeader.textContent = formattedTagName;
-        pageTitle.textContent = `Tag ${formattedTagName} - Guia de Tags HTML5`;
+        pageTitle.textContent = `${formattedTagName} - Guia de Tags HTML5`;
 
         try {
             // 2. Buscar os dados da planilha
@@ -36,11 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = parseCSV(csvText);
 
             // 4. Filtrar os dados para encontrar apenas as contribuições para a tag atual
-            // IMPORTANTE: 'Tag' deve ser o nome exato do cabeçalho na sua planilha!
-            const tagContributions = data.filter(row => row.Tag && row.Tag.trim() === formattedTagName);
+            // ALTERAÇÃO: O nome da coluna foi ajustado para "tag" (minúsculo) para corresponder ao seu CSV.
+            const tagContributions = data.filter(row => row.tag && row.tag.trim() === formattedTagName);
 
             if (tagContributions.length === 0) {
-                displayError(`Nenhuma contribuição encontrada para a tag ${formattedTagName}. Seja o primeiro a enviar!`);
+                displayError(`<p>Nenhuma contribuição encontrada para a tag ${tagName}.</p> <p><strong> Seja o primeiro a enviar!</strong></p>`);
                 return;
             }
 
@@ -54,16 +54,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Função para converter texto CSV em um array de objetos
+    // ALTERAÇÃO: Esta função foi melhorada para lidar com colunas vazias no cabeçalho do CSV.
     function parseCSV(text) {
         const lines = text.split(/\r?\n/);
         const headers = lines[0].split(',');
+
+        // Lida com a coluna vazia no seu CSV, que provavelmente deveria ser a descrição.
+        const emptyHeaderIndex = headers.indexOf('');
+        if (emptyHeaderIndex !== -1) {
+            headers[emptyHeaderIndex] = 'O que é?';
+        }
+
         const result = [];
         for (let i = 1; i < lines.length; i++) {
             if (!lines[i]) continue;
             const obj = {};
             const currentline = lines[i].split(',');
             for (let j = 0; j < headers.length; j++) {
-                obj[headers[j].trim()] = currentline[j] ? currentline[j].trim().replace(/"/g, '') : '';
+                const headerKey = headers[j].trim().replace(/"/g, '');
+                obj[headerKey] = currentline[j] ? currentline[j].trim().replace(/"/g, '') : '';
             }
             result.push(obj);
         }
@@ -74,33 +83,36 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderContributions(contributions) {
         contributionsContainer.innerHTML = ''; // Limpa a mensagem de "carregando"
         contributions.forEach(item => {
+            console.log(item)
             const article = document.createElement('article');
             article.className = 'tag-content';
             
-            // IMPORTANTE: Os nomes aqui ('O que é?', 'Quando usar?', etc.) devem corresponder
-            // exatamente aos cabeçalhos da sua planilha!
+            // ALTERAÇÃO GERAL: Os nomes das colunas (ex: 'Usos comuns:') foram atualizados
+            // para corresponder exatamente aos cabeçalhos do seu arquivo CSV.
             article.innerHTML = `
-                <section>
-                    <h2>O que é?</h2>
-                    <p>${item['O que é? (Descrição...)'] || 'Não informado'}</p>
-                </section>
+                
                 <section>
                     <h2>Quando usar?</h2>
-                    <p>${item['Quando usar? (Exemplo de uso prático)'] || 'Não informado'}</p>
+                    <article>${escapeHtml(item['Usos comuns:'] || 'Não informado')}</article>
                 </section>
                 <section>
                     <h2>Exemplo de Código</h2>
-                    <pre><code>${escapeHtml(item['Exemplo de Código'] || '')}</code></pre>
+                    <pre><code>${escapeHtml(item['Exemplos de uso em código:'] || '')}</code></pre>
                 </section>
                 <section>
                     <h2>Fontes da Pesquisa</h2>
                     <ul>
-                        <li><a href="${item['Fontes da Pesquisa (links)'] || '#'}" target="_blank" rel="noopener noreferrer">${item['Fontes da Pesquisa (links)'] || 'Não informado'}</a></li>
+                        <li><a href="${item['Fontes de pesquisa (links):'] || '#'}" target="_blank" rel="noopener noreferrer">${item['Fontes de pesquisa (links):'] || 'Não informado'}</a></li>
                     </ul>
                 </section>
                 <section>
                     <h2>Contribuição de:</h2>
-                    <p class="contributor-name">${item['Seu Nome Completo'] || 'Anônimo'}</p>
+                    <ul>
+                    <li class="contributor-name">${item['Pesquisa realizada por:'] || 'Anônimo'}</li>
+                    <li class="contributor-name">${item['Nome 2'] || 'Anônimo'}</li>
+                </section>
+                <section>
+                    <p>Atualizado em: ${item['Submitted at'] || ' Sem informação'}</p>
                 </section>
             `;
             contributionsContainer.appendChild(article);
