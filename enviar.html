@@ -3,31 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enviar Pesquisa - Blog HTML5</title>
+    <title>Enviar Pesquisa - Guia de Tags HTML5</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
-    <style>
-        .main-header{
-            height: 100px;
-            margin-bottom: 8px;
-        }
-    </style>
 </head>
 <body>
 
     <header class="main-header">
         <div class="container">
-            <h1>Formulário de Pesquisa</h1>
-            <p>Preencha os campos abaixo para adicionar seu conteúdo ao blog.</p>
+            <h1>Enviar sua Pesquisa</h1>
+            <p>Contribua com o guia de referência da turma.</p>
         </div>
     </header>
-    
-    <main class="container pesquisa">
-        <a href="projeto-html.html" class="back-link">&larr; Voltar para Todos os Tópicos</a>
-        <iframe data-tally-src="https://tally.so/embed/wdOAJK?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1" loading="lazy" width="100%"  frameborder="0" marginheight="0" marginwidth="0" title="Wiki1DTM"></iframe>
-        <script>var d=document,w="https://tally.so/widgets/embed.js",v=function(){"undefined"!=typeof Tally?Tally.loadEmbeds():d.querySelectorAll("iframe[data-tally-src]:not([src])").forEach((function(e){e.src=e.dataset.tallySrc}))};if("undefined"!=typeof Tally)v();else if(d.querySelector('script[src="'+w+'"]')==null){var s=d.createElement("script");s.src=w,s.onload=v,s.onerror=v,d.body.appendChild(s);}</script>
+
+    <main class="container">
+        <a href="projeto-html.html" class="back-link">&larr; Voltar para a Lista de Tópicos</a>
+
+        <form id="form-pesquisa" class="submission-form">
+            <div class="form-group">
+                <label for="nome">Seu Nome Completo</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="tag">Tag Pesquisada (ex: &lt;header&gt;)</label>
+                <input type="text" id="tag" name="tag" required>
+            </div>
+            <div class="form-group">
+                <label for="descricao">O que é? (Descrição)</label>
+                <textarea id="descricao" name="descricao" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="usos">Quando usar? (Usos comuns)</label>
+                <textarea id="usos" name="usos" rows="4" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="codigo">Exemplo de Código</label>
+                <textarea id="codigo" name="codigo" class="code-input" rows="6" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="fontes">Fontes da Pesquisa (links)</label>
+                <input type="text" id="fontes" name="fontes" required>
+            </div>
+
+            <button type="submit" class="cta-button">Enviar Contribuição</button>
+        </form>
+        
+        <!-- Div para exibir mensagens de sucesso ou erro -->
+        <div id="form-message" style="display: none;"></div>
+
     </main>
 
     <footer class="main-footer">
@@ -36,7 +61,7 @@
         </div>
     </footer>
 
-    <!-- Conecta o arquivo JavaScript -->
+    <!-- Adicionando o link para nosso novo script -->
     <script src="script.js"></script>
 
 </body>

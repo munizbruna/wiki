@@ -3,41 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- O título será definido pelo JavaScript -->
-    <title>Carregando Tag... - Guia de Tags HTML5</title>
+    <title>Detalhes da Tag - Guia HTML5</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Roboto+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-
     <header class="main-header">
         <div class="container">
-            <!-- O título da tag será inserido aqui -->
-            <h1 id="tag-title-header" class="tag-title">Carregando...</h1>
-            <p>Um guia de referência construído pela turma <strong>1DTM</strong> para explorar as tags do HTML5.</p>
+            <!-- O título será preenchido pelo JavaScript -->
+            <h1 id="tag-name">Carregando...</h1>
         </div>
     </header>
 
     <main class="container">
-        <a href="projeto-html.html" class="back-link">&larr; Voltar para Todos os Tópicos</a>
-
-        <!-- Este contêiner irá receber todas as contribuições -->
-        <div id="contributions-container">
-            <p class="loading-message">Buscando dados na planilha...</p>
+        <a href="projeto-html.html" class="back-link">&larr; Voltar para Todas as Tags</a>
+        
+        <!-- O conteúdo das contribuições será inserido aqui pelo JavaScript -->
+        <div id="submissions-container">
+            <p>Buscando informações no banco de dados...</p>
         </div>
-
     </main>
-
+    
     <footer class="main-footer">
         <div class="container">
             <p>Projeto de Estudo da Turma de Desenvolvimento Web - 2025</p>
         </div>
     </footer>
 
-    <!-- Nosso novo script para renderizar os dados -->
+    <!-- Script que busca e renderiza os dados da API -->
     <script src="renderer.js"></script>
-
 </body>
 </html>

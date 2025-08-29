@@ -1,31 +1,51 @@
-// Aguarda o conteúdo da página ser totalmente carregado
 document.addEventListener('DOMContentLoaded', () => {
-
-    // Seleciona o formulário pela sua ID
     const form = document.getElementById('form-pesquisa');
+    const messageDiv = document.getElementById('form-message');
+    const API_URL = 'https://wiki1dtm-backend.onrender.com';
 
-    // Verifica se o formulário existe na página atual para evitar erros
     if (form) {
-        // Define o código secreto da turma. 
-        // IMPORTANTE: Este código fica visível no front-end. 
-        // É uma barreira simples, não uma segurança robusta.
-        const codigoCorreto = 'HTMLPROJETO2025';
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Impede o envio padrão do formulário
 
-        // Adiciona um "ouvinte" para o evento de "submit" (envio) do formulário
-        form.addEventListener('submit', (event) => {
-            
-            // Pega o valor digitado no campo de código
-            const codigoDigitado = document.getElementById('codigo').value;
+            const formData = new FormData(form);
+            const data = {
+                author: formData.get('nome'),
+                tag: formData.get('tag'),
+                description: formData.get('descricao'),
+                uses: formData.get('usos'),
+                code: formData.get('codigo'),
+                sources: formData.get('fontes')
+            };
 
-            // Compara o código digitado com o código correto
-            if (codigoDigitado !== codigoCorreto) {
-                // Se estiver incorreto, mostra um alerta para o usuário
-                alert('O Código da Turma está incorreto. Por favor, verifique e tente novamente.');
-                
-                // Impede que o formulário seja enviado para o Formspree
-                event.preventDefault(); 
+            // Exibe mensagem de "enviando"
+            messageDiv.textContent = 'Enviando sua contribuição...';
+            messageDiv.className = 'message';
+            messageDiv.style.display = 'block';
+
+            try {
+                const response = await fetch(`${API_URL}/api/submissions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    messageDiv.textContent = 'Contribuição enviada com sucesso! Obrigado.';
+                    messageDiv.className = 'message success';
+                    form.reset(); // Limpa o formulário
+                } else {
+                    throw new Error(result.error || 'Ocorreu um erro ao enviar.');
+                }
+
+            } catch (error) {
+                messageDiv.textContent = `Erro: ${error.message}`;
+                messageDiv.className = 'message error';
+                console.error('Erro no envio do formulário:', error);
             }
-            // Se o código estiver correto, o script não faz nada e o formulário é enviado normalmente.
         });
     }
 });
