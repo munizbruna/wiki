@@ -1,3 +1,24 @@
+function setRandomHeaderColor() {
+    const colorVariableNames = [
+      "--header-cor-1",
+      "--header-cor-2",
+      "--header-cor-3",
+      "--header-cor-4",
+      "--header-cor-5",
+    ];
+
+    // Escolhe um nome de variável aleatoriamente
+    const randomIndex = Math.floor(Math.random() * colorVariableNames.length);
+    const randomColorName = colorVariableNames[randomIndex];
+
+    // Define a variável --header-bg-dinamico para usar a cor da variável sorteada
+    // ex: --header-bg-dinamico = var(--header-cor-3)
+    document.documentElement.style.setProperty(
+      "--header-bg-dinamico",
+      `var(${randomColorName})`
+    );
+  }
+
 const API_URL = 'https://wiki1dtm-backend.onrender.com';
 //const API_URL = 'http://localhost:3000';
 
@@ -116,7 +137,11 @@ async function fetchAndRenderSubmissions() {
 }
 
 // Executa a função quando o conteúdo da página é carregado
-document.addEventListener('DOMContentLoaded', fetchAndRenderSubmissions);
+document.addEventListener('DOMContentLoaded', () => {
+    setRandomHeaderColor(); // << ADICIONE ESTA LINHA
+    fetchAndRenderSubmissions(); 
+});
+
 
 function escapeHtml(unsafeString) {
     if (!unsafeString) return '';

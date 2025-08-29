@@ -1,4 +1,26 @@
+function setRandomHeaderColor() {
+    const colorVariableNames = [
+      "--header-cor-1",
+      "--header-cor-2",
+      "--header-cor-3",
+      "--header-cor-4",
+      "--header-cor-5",
+    ];
+
+    // Escolhe um nome de variável aleatoriamente
+    const randomIndex = Math.floor(Math.random() * colorVariableNames.length);
+    const randomColorName = colorVariableNames[randomIndex];
+
+    // Define a variável --header-bg-dinamico para usar a cor da variável sorteada
+    // ex: --header-bg-dinamico = var(--header-cor-3)
+    document.documentElement.style.setProperty(
+      "--header-bg-dinamico",
+      `var(${randomColorName})`
+    );
+  }
+
 document.addEventListener("DOMContentLoaded", () => {
+  setRandomHeaderColor(); // << ADICIONE ESTA LINHA
   const copyButton = document.querySelector(".copy-button");
   const codeBlock = document.getElementById("myCodeBlock");
 
