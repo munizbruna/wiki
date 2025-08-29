@@ -23,23 +23,27 @@
 
         <form id="form-pesquisa" class="submission-form">
             <div class="form-group">
-                <label for="nome">Seu Nome Completo</label>
-                <input type="text" id="nome" name="nome" required>
+                <label for="nome">Nome da dupla:</label>
+                <div class="authors">
+                <input type="text" id="nome1" name="nome1" placeholder="Nome completo pessoa 1" required>
+                <input type="text" id="nome2" name="nome2" placeholder="Nome completo pessoa 2">
+                </div>
+
             </div>
             <div class="form-group">
-                <label for="tag">Tag Pesquisada (ex: &lt;header&gt;)</label>
-                <input type="text" id="tag" name="tag" required>
+                <label for="tag">Tag Pesquisada</label>
+                <input type="text" id="tag" name="tag" placeholder="ex: &lt;header&gt;" required>
             </div>
             <div class="form-group">
-                <label for="descricao">O que é? (Descrição)</label>
+                <label for="descricao">Descrição da tag:</label>
                 <textarea id="descricao" name="descricao" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label for="usos">Quando usar? (Usos comuns)</label>
+                <label for="usos">Usos comuns:</label>
                 <textarea id="usos" name="usos" rows="4" required></textarea>
             </div>
             <div class="form-group">
-                <label for="codigo">Exemplo de Código</label>
+                <label for="codigo">Exemplo de Código:</label>
                 <textarea id="codigo" name="codigo" class="code-input" rows="6" required></textarea>
             </div>
             <div class="form-group">
@@ -57,7 +61,7 @@
 
     <footer class="main-footer">
         <div class="container">
-            <p>Projeto de Estudo da Turma de Desenvolvimento Web - 2025</p>
+            <p>Projeto de Estudo da Turma 1DTM - 2025</p>
         </div>
     </footer>
 

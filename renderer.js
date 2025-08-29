@@ -1,24 +1,48 @@
-// A URL da sua API backend que está rodando localmente
-const API_URL = 'https://wiki1dtm-backend.onrender.com';
+//const API_URL = 'https://wiki1dtm-backend.onrender.com';
+const API_URL = 'http://localhost:3000';
 
-// Pega o nome da tag da URL (ex: tag-template.html?tag=header -> "header")
+// Pega os elementos do DOM
+const pageTitle = document.getElementById('tag-name');
+const submissionsContainer = document.getElementById('submissions-container');
 const urlParams = new URLSearchParams(window.location.search);
 const tagName = urlParams.get('tag');
 
-const pageTitle = document.getElementById('tag-name');
-const submissionsContainer = document.getElementById('submissions-container');
-
-/**
- * Sanitize a string to prevent basic HTML injection.
- * @param {string} str The string to sanitize.
- * @returns {string} The sanitized string.
- */
+ //Sanitize a string to prevent basic HTML injection.
 function sanitize(str) {
     if (!str) return '';
     const temp = document.createElement('div');
     temp.textContent = str;
     return temp.innerHTML;
 }
+
+ //Adiciona a funcionalidade de clique a todos os botões de cópia.
+
+function setupCopyButtons() {
+    const allCopyButtons = document.querySelectorAll('.copy-button');
+    
+    allCopyButtons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            // Encontra o bloco de código relativo a este botão
+            const codeBlock = event.target.nextElementSibling.querySelector('code');
+            
+            if (codeBlock) {
+                navigator.clipboard.writeText(codeBlock.textContent).then(() => {
+                    button.textContent = 'Copiado!';
+                    button.classList.add('copied');
+                    setTimeout(() => {
+                        button.textContent = 'Copiar';
+                        button.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Falha ao copiar:', err);
+                    // Fallback para o método antigo se a Clipboard API falhar
+                    // (Opcional, mas bom para compatibilidade)
+                });
+            }
+        });
+    });
+}
+
 
 // Função principal para buscar e renderizar os dados da API
 async function fetchAndRenderSubmissions() {
@@ -28,30 +52,27 @@ async function fetchAndRenderSubmissions() {
         return;
     }
 
-    // Define o título da página
-    pageTitle.textContent = `<${tagName}>`;
-    document.title = `Detalhes da Tag: <${tagName}>`;
+    pageTitle.textContent = `<${sanitize(tagName)}>`;
+    document.title = `Detalhes da Tag: <${sanitize(tagName)}>`;
 
     try {
-        // Faz a requisição para a API
         const response = await fetch(`${API_URL}/api/tags/${tagName}`);
         if (!response.ok) {
             throw new Error(`Erro na rede: ${response.statusText}`);
         }
         const submissions = await response.json();
 
-        // Limpa o container
-        submissionsContainer.innerHTML = '';
+        submissionsContainer.innerHTML = ''; // Limpa o container
 
         if (submissions.length === 0) {
             submissionsContainer.innerHTML = '<p>Ainda não há contribuições para esta tag. Seja o primeiro a enviar!</p>';
             return;
         }
 
-        // Itera sobre cada contribuição e cria o HTML correspondente
-        submissions.forEach(submission => {
+        submissions.forEach((submission, index) => {
             const submissionElement = document.createElement('div');
             submissionElement.className = 'submission-card';
+            const safeCodeExample = escapeHtml(submission.code_example); 
 
             submissionElement.innerHTML = `
                 <div class="submission-content">
@@ -62,10 +83,18 @@ async function fetchAndRenderSubmissions() {
                     <p>${sanitize(submission.common_uses)}</p>
 
                     <h3>Exemplo de Código</h3>
-                    <pre><code>${sanitize(submission.code_example)}</code></pre>
+                    <div class="code-editor-container">
+                        <button class="copy-button">Copiar</button>
+                        <pre><code class="language-html">${safeCodeExample}</code></pre>
+                    </div>
 
                     <div class="submission-meta">
-                        <p><strong>Enviado por:</strong> ${sanitize(submission.author_name)}</p>
+                        <p><strong>Enviado por:</strong></p>
+                        <ul class="">
+                            <li>${sanitize(submission.author_name1)}</li>
+                            <li>${sanitize(submission.author_name2)}</li>
+                        </ul>
+
                         <p><strong>Fontes:</strong> <a href="${sanitize(submission.sources)}" target="_blank" rel="noopener noreferrer">${sanitize(submission.sources)}</a></p>
                     </div>
                 </div>
@@ -73,11 +102,28 @@ async function fetchAndRenderSubmissions() {
             submissionsContainer.appendChild(submissionElement);
         });
 
+        // DEPOIS de adicionar todos os cards ao DOM:
+        // 1. Adiciona a funcionalidade aos botões de cópia
+        setupCopyButtons();
+        
+        // 2. Manda o Prism.js colorir todos os blocos de código na página
+        Prism.highlightAll();
+
     } catch (error) {
         console.error('Erro ao buscar as contribuições:', error);
-        submissionsContainer.innerHTML = '<p class="error-message">Não foi possível carregar as informações. Verifique se o servidor backend (server.js) está rodando corretamente.</p>';
+        submissionsContainer.innerHTML = '<p class="error-message">Não foi possível carregar as informações. Verifique se o servidor backend está rodando.</p>';
     }
 }
 
 // Executa a função quando o conteúdo da página é carregado
 document.addEventListener('DOMContentLoaded', fetchAndRenderSubmissions);
+
+function escapeHtml(unsafeString) {
+    if (!unsafeString) return '';
+    return unsafeString
+         .replace(/&/g, "&amp;")
+         .replace(/</g, "&lt;")
+         .replace(/>/g, "&gt;")
+         .replace(/"/g, "&quot;")
+         .replace(/'/g, "&#039;");
+}
