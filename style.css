@@ -7,13 +7,16 @@
   --border-color: #ddd;
   --header-text: #fff;
 
-  --header-cor-1: #2d3748; /* Cinza Chumbo */
+  --header-cor-1: #a3048b; /* Cinza Chumbo */
   --header-cor-2: #2c5282; /* Azul Escuro */
   --header-cor-3: #2f855a; /* Verde Escuro */
   --header-cor-4: #b7791f; /* Dourado Escuro */
   --header-cor-5: #805ad5; /* Roxo */
 
-  --header-bg-dinamico: #000000; /* Cor padrão/fallback */
+  --header-bg-dinamico: #1e1e1e; /* Cor padrão/fallback */
+}
+#tag-name{
+    filter: drop-shadow(1px 5px 1px rgba(255, 255, 255, 0.5));
 }
 
 body {
