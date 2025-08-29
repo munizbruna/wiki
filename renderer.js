@@ -34,7 +34,7 @@ async function fetchAndRenderSubmissions() {
 
     try {
         // Faz a requisição para a API
-        const response = await fetch(`${API_URL}/tags/${tagName}`);
+        const response = await fetch(`${API_URL}/api/tags/${tagName}`);
         if (!response.ok) {
             throw new Error(`Erro na rede: ${response.statusText}`);
         }
