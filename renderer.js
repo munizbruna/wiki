@@ -1,5 +1,5 @@
-//const API_URL = 'https://wiki1dtm-backend.onrender.com';
-const API_URL = 'http://localhost:3000';
+const API_URL = 'https://wiki1dtm-backend.onrender.com';
+//const API_URL = 'http://localhost:3000';
 
 // Pega os elementos do DOM
 const pageTitle = document.getElementById('tag-name');
