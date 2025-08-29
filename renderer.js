@@ -91,7 +91,7 @@ async function fetchAndRenderSubmissions() {
                     <div class="submission-meta">
                         <p><strong>Enviado por:</strong></p>
                         <ul class="">
-                            <li>${sanitize(submission.author_name1)}</li>
+                            <li>${sanitize(submission.author_name)}</li>
                             <li>${sanitize(submission.author_name2)}</li>
                         </ul>
 
