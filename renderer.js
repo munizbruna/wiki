@@ -19,8 +19,8 @@ function setRandomHeaderColor() {
     );
   }
 
-const API_URL = 'https://wiki1dtm-backend.onrender.com';
-//const API_URL = 'http://localhost:3000';
+//const API_URL = 'https://wiki1dtm-backend.onrender.com';
+const API_URL = 'http://localhost:3000';
 
 // Pega os elementos do DOM
 const pageTitle = document.getElementById('tag-name');
@@ -74,7 +74,7 @@ async function fetchAndRenderSubmissions() {
     }
 
     pageTitle.textContent = `<${sanitize(tagName)}>`;
-    document.title = `Detalhes da Tag: <${sanitize(tagName)}>`;
+    document.title = ` ${sanitize(tagName)} - Detalhes da Tag`;
 
     try {
         const response = await fetch(`${API_URL}/api/tags/${tagName}`);

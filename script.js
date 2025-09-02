@@ -26,26 +26,61 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const form = document.getElementById("form-pesquisa");
   const messageDiv = document.getElementById("form-message");
-  const API_URL = "https://wiki1dtm-backend.onrender.com";
-  //const API_URL = "http://localhost:3000";
+  //const API_URL = "https://wiki1dtm-backend.onrender.com";
+  const API_URL = "http://localhost:3000";
 
   if (form) {
     form.addEventListener("submit", async (event) => {
       event.preventDefault(); // Impede o envio padrão do formulário
 
       const formData = new FormData(form);
+
+      const tagValue = formData.get("tag").trim();
+      const tagRegex = /^<[a-zA-Z0-9]+>$/;
+      if (!tagRegex.test(tagValue)) {
+        messageDiv.textContent =
+          'Erro: Formato da tag inválido. Por favor, use o formato "<header>", sem espaços ou caracteres especiais.';
+        messageDiv.className = "message error";
+        messageDiv.style.display = "block";
+        return; // Interrompe o envio se a validação falhar
+      }
+
+      const sourcesValue = formData.get("source1").trim();
+      // Função para verificar se uma string é uma URL válida
+      const isValidUrl = (urlString) => {
+        // Se o campo estiver vazio, consideramos válido (não é obrigatório)
+        if (!urlString) return true;
+        try {
+          new URL(urlString);
+          return true; // A URL é válida se nenhum erro for lançado
+        } catch (e) {
+          return false; // A URL é inválida se um erro for capturado
+        }
+      };
+
+      if (!isValidUrl(sourcesValue)) {
+        messageDiv.textContent =
+          'Erro: O link da fonte parece ser inválido. Por favor, insira uma URL completa (ex: https://www.exemplo.com).';
+        messageDiv.className = "message error";
+        messageDiv.style.display = "block";
+        return; // Interrompe o envio se a validação falhar
+      }
+
       const data = {
-        author: formData.get("nome1"),
-        author2: formData.get("nome2"),
+        author1: formData.get("author1"),
+        author2: formData.get("author2"),
 
         tag: formData.get("tag"),
         description: formData.get("descricao"),
         uses: formData.get("usos"),
         code: formData.get("codigo"),
-        sources: formData.get("fontes"),
+        source1: formData.get("source1"),
+        source2: formData.get("source2"),
+
       };
 
       // Exibe mensagem de "enviando"
+      console.log("Enviando dados:", data);
       messageDiv.textContent = "Enviando sua contribuição...";
       messageDiv.className = "message";
       messageDiv.style.display = "block";
